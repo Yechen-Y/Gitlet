@@ -83,7 +83,7 @@ public class Commit implements Serializable {
         parentCommit = preCommit();
     }
 
-    private Commit preCommit() {
+    public static Commit preCommit() {
         String curBranchPath = readContentsAsString(HEAD);
         String preCommitPath = readContentsAsString(new File(curBranchPath));
         return readObject(join(OBJECT_DIR, preCommitPath), Commit.class);
@@ -131,5 +131,7 @@ public class Commit implements Serializable {
         new Commit();
     }
 
-
+    public HashMap<String, Blob> getTracked() {
+        return tracked;
+    }
 }

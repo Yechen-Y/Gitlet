@@ -30,6 +30,10 @@ public class Main {
                 validateNumArg(args, 2);
                 Repository.commit(args[1]);
                 break;
+            case "checkout":
+                if (args.length == 3 && args[1].equals("--")) {
+                    Repository.simpleCheckOut(args[2]);
+                }
         }
     }
 

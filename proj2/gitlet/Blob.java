@@ -27,6 +27,14 @@ public class Blob implements Serializable {
         return sha1((Object) contents);
     }
 
+    public String getSourceFilePath() {
+        return sourceFilePath;
+    }
+
+    public byte[] getContents() {
+        return contents;
+    }
+
     public void StoreBlob() {
         writeObject(join(OBJECT_DIR, id), this);
     }

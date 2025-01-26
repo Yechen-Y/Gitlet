@@ -78,4 +78,20 @@ public class Repository {
             exit("Not in an initialized Gitlet directory.");
         }
     }
+
+    //Todo: 如果当前Head指向的commit不存在则报错 ok!
+    //Todo: 如果存在则将该文件的历史版本替换到当前的WD(work direction) ok!
+    //Todo: 如果已经删除了当文件 然后又要还原前一个版本的文件是否会报错?
+    public static void simpleCheckOut(String fileName) {
+        Commit pre = preCommit();
+        if (!pre.getTracked().containsKey(fileName)) {
+            exit("File does not exist in that commit.");
+        }
+        Blob needFile = pre.getTracked().get(fileName);
+        File temp = new File(needFile.getSourceFilePath());
+        if (!temp.exists()) {
+            mkFile(temp);
+        }
+        writeContents(new File(needFile.getSourceFilePath()), (Object) needFile.getContents());
+    }
 }
