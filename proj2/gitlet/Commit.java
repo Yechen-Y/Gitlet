@@ -34,6 +34,7 @@ public class Commit implements Serializable {
      * Todo: 父commit应该为当前Head指向的branch的commit
      * Todo: trackde 应该先复制前一个commit的tracked，然后再根据当前的暂存区来改变
      * Todo: 设置InitCommit i think its very hard to handle!
+     * Todo: 一个commit的父commit可能有多个 所以待修改
      */
 
     public static HashMap<String, Commit> commitTree = new HashMap<>();
@@ -123,6 +124,18 @@ public class Commit implements Serializable {
     public String getId() {
         return id;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Commit getParentCommit() {
+        return parentCommit;
+    }
     /**
      * Todo: 第一次提交比较不同tracked和parent都应该为null ok!
      * Todo: 设置当前branch文件的内容
@@ -131,6 +144,7 @@ public class Commit implements Serializable {
         new Commit();
     }
 
+    // 返回commit的tracked hashmap
     public HashMap<String, Blob> getTracked() {
         return tracked;
     }

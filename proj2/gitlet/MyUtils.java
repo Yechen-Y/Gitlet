@@ -13,6 +13,10 @@ public class MyUtils {
         System.exit(0);
     }
 
+    public static void exit() {
+        System.exit(0);
+    }
+
     public static void mkdir(File file) {
         try {
             file.mkdir();

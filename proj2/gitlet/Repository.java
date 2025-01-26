@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.util.*;
 
 import static gitlet.Commit.*;
 import static gitlet.Utils.*;
@@ -69,8 +70,21 @@ public class Repository {
     }
 
     public static void commit(String message) {
-        checkIfGitletExits();
+        checkIfCanCommit();
         new Commit(message);
+    }
+
+    private static void checkIfCanCommit() {
+        checkIfGitletExits();
+        if (checkIfIndexIsEmpty()) {
+            exit();
+        }
+    }
+
+    private static boolean checkIfIndexIsEmpty() {
+        StageArea area = readObject(INDEX, StageArea.class);
+        HashMap<String, Blob> index = area.Bolbs;
+        return index.isEmpty();
     }
 
     private static void checkIfGitletExits() {
@@ -81,7 +95,7 @@ public class Repository {
 
     //Todo: 如果当前Head指向的commit不存在则报错 ok!
     //Todo: 如果存在则将该文件的历史版本替换到当前的WD(work direction) ok!
-    //Todo: 如果已经删除了当文件 然后又要还原前一个版本的文件是否会报错?
+    //Todo: 如果已经删除了当文件 然后又要还原前一个版本的文件是否会报错? ok!
     public static void simpleCheckOut(String fileName) {
         Commit pre = preCommit();
         if (!pre.getTracked().containsKey(fileName)) {
@@ -93,5 +107,21 @@ public class Repository {
             mkFile(temp);
         }
         writeContents(new File(needFile.getSourceFilePath()), (Object) needFile.getContents());
+    }
+
+    // Todo:先不处理merge的情况，显示该分支所有的commit记录
+    // tips:使用formatter格式化输出
+    public static void log() {
+        Commit pre = preCommit();
+        logHelper(pre);
+    }
+
+    private static void logHelper(Commit commit) {
+        if (commit != null) {
+            Formatter form = new Formatter();
+            form.format("===\ncommit %1$s\nDate: %2$ta %2$tb %2$td %2$tT %2$tY %2$tz\n%3$s\n", commit.getId(), commit.getDate(), commit.getMessage());
+            System.out.println(form);
+            logHelper(commit.getParentCommit());
+        }
     }
 }

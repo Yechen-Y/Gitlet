@@ -34,6 +34,11 @@ public class Main {
                 if (args.length == 3 && args[1].equals("--")) {
                     Repository.simpleCheckOut(args[2]);
                 }
+                break;
+            case "log":
+                validateNumArg(args, 1);
+                Repository.log();
+                break;
         }
     }
 
