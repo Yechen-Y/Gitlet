@@ -1,6 +1,8 @@
 package gitlet;
 
 import java.io.File;
+
+import static gitlet.Commit.*;
 import static gitlet.Utils.*;
 import static gitlet.MyUtils.*;
 import static gitlet.StageArea.*;
@@ -27,11 +29,11 @@ public class Repository {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     /** The object directory*/
-    public static final File OBJECT_DIR = join(CWD, "object");
+    public static final File OBJECT_DIR = join(GITLET_DIR, "object");
     /** The Head file*/
-    public static final File HEAD = join(CWD, "HEAD");
+    public static final File HEAD = join(GITLET_DIR, "HEAD");
     /** The branch directory*/
-    public static final File REF = join(CWD, "ref");
+    public static final File REF = join(GITLET_DIR, "ref");
     /** The Local branch file*/
     public static final File LOCAL_BRANCH = join(REF, "heads");
     /** The StageArea file*/
@@ -53,12 +55,27 @@ public class Repository {
         mkdir(REF);
         mkdir(LOCAL_BRANCH);
         new StageArea();
+        mkFile(HEAD);
+        createBranch("master");
+        InitCommit();
     }
 
     /**
      * Todo add file to the stage area
      */
     public static void add(String fileName) {
+        checkIfGitletExits();
         addToIndex(fileName);
+    }
+
+    public static void commit(String message) {
+        checkIfGitletExits();
+        new Commit(message);
+    }
+
+    private static void checkIfGitletExits() {
+        if (!GITLET_DIR.exists()) {
+            exit("Not in an initialized Gitlet directory.");
+        }
     }
 }

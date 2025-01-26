@@ -16,7 +16,7 @@ public class StageArea implements Serializable {
      * Todo: 解决边缘情况 1.add失败的情况 没有该文件 ok!
      * Todo: 2.即将添加到暂存区的文件和上一个commit的文件相同
      */
-    private HashMap<String, Blob> Bolbs;
+    public HashMap<String, Blob> Bolbs;
 
 
     public StageArea() {
@@ -34,6 +34,7 @@ public class StageArea implements Serializable {
         writeObject(INDEX, area);
     }
 
+    // 将Blob对象加到暂存区里然后再将暂存区对象转化为文件
     public static void addToIndex(String filename) {
         File file = join(CWD, filename);
         if (!file.exists()) {

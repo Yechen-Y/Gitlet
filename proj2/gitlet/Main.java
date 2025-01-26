@@ -1,5 +1,9 @@
 package gitlet;
 
+import java.util.Date;
+
+import static gitlet.Commit.InitCommit;
+
 /** Driver class for Gitlet, a subset of the Git version-control system.
  *  @author Yechen
  */
@@ -12,7 +16,6 @@ public class Main {
         if (args.length == 0) {
             MyUtils.exit("Please enter a command.");
         }
-
         String firstArg = args[0];
         switch(firstArg) {
             case "init":
@@ -23,7 +26,10 @@ public class Main {
                 validateNumArg(args, 2);
                 Repository.add(args[1]);
                 break;
-            // TODO: FILL THE REST IN
+            case "commit":
+                validateNumArg(args, 2);
+                Repository.commit(args[1]);
+                break;
         }
     }
 
