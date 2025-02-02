@@ -100,7 +100,11 @@ public class Commit implements Serializable {
         StageArea area = readObject(INDEX, StageArea.class);
         tracked = (HashMap<String, Blob>) parentCommit.tracked.clone();
         tracked.putAll(area.Bolbs);
+        for (String filename : area.rmBlobs) {
+            tracked.remove(filename);
+        }
         HashSet<Blob> blobs = new HashSet<>(tracked.values());
+        //这步是为了存储Blob到object文件夹中
         for (Blob e : blobs) {
             e.StoreBlob();
         }

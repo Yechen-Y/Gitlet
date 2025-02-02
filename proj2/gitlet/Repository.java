@@ -155,7 +155,19 @@ public class Repository {
      * Todo: 正确切换分支后应该清空暂存区
      */
     public static void checkoutBranch(String branchName) {
+        File branch = new File(LOCAL_BRANCH, branchName);
+        if (!branch.exists()) {
+            exit("No such branch exists.");
+        }
+        if (branch.getAbsolutePath().equals(readContentsAsString(HEAD))) {
+            exit("No need to checkout the current branch.");
+        }
 
 
+    }
+
+    public static void rm(String fileName) {
+        StageArea area = readObject(INDEX, StageArea.class);
+        rmFile(area, fileName);
     }
 }

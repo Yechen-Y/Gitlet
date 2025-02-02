@@ -49,6 +49,10 @@ public class Main {
                 validateNumArg(args, 2);
                 Repository.branch(args[1]);
                 break;
+            case "rm":
+                validateNumArg(args, 2);
+                Repository.rm(args[1]);
+                break;
         }
     }
 
