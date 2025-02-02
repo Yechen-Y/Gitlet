@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
+import static gitlet.MyUtils.exit;
 import static gitlet.MyUtils.mkFile;
 import static gitlet.Repository.*;
 import static gitlet.Utils.*;
@@ -93,6 +94,7 @@ public class Commit implements Serializable {
     /**
      * Todo: tracked应该为前一个commit的tracked加上当前暂存区的，设置后应该清空暂存区 ok!
      * Todo: 将tracked中的Blob存储到object中 ok!
+     * Todo: 有个问题就是无法判断工作区中删除的文件！
      */
     public void setTracked() {
         StageArea area = readObject(INDEX, StageArea.class);
@@ -147,5 +149,25 @@ public class Commit implements Serializable {
     // 返回commit的tracked hashmap
     public HashMap<String, Blob> getTracked() {
         return tracked;
+    }
+
+    /**
+     * Todo: 返回特定hashId的commit
+     * Todo: 解决一个错误情况 commit不存在
+     */
+    public static Commit specificCommit(String commitId) {
+        Commit preCommit = preCommit();
+        return specCommitHelper(commitId, preCommit);
+    }
+
+    private static Commit specCommitHelper(String commitId, Commit preCommit) {
+        if (preCommit == null) {
+            exit("No commit with that id exists.");
+        }
+        if (preCommit.getId().equals(commitId)) {
+            return preCommit;
+        } else {
+            return specCommitHelper(commitId, preCommit.getParentCommit());
+        }
     }
 }

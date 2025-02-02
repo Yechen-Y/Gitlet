@@ -14,9 +14,11 @@ public class StageArea implements Serializable {
      * Todo: StageArea应该存储在.gitlet/index 中,ok! 当commit后应该清除index中的内容 ok!
      * Todo: 每次改变暂存区都应该保存起来 使用writecontents?
      * Todo: 解决边缘情况 1.add失败的情况 没有该文件 ok!
-     * Todo: 2.即将添加到暂存区的文件和上一个commit的文件相同
+     * Todo: 2.即将添加到暂存区的文件和上一个commit的文件相同 ok!
+     * Todo: 再添加一个map用来存储删除文件
      */
     public HashMap<String, Blob> Bolbs;
+    public HashMap<String, Blob> rmBlobs;
 
 
     public StageArea() {

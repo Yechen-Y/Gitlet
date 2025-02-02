@@ -96,17 +96,27 @@ public class Repository {
     //Todo: 如果当前Head指向的commit不存在则报错 ok!
     //Todo: 如果存在则将该文件的历史版本替换到当前的WD(work direction) ok!
     //Todo: 如果已经删除了当文件 然后又要还原前一个版本的文件是否会报错? ok!
-    public static void simpleCheckOut(String fileName) {
+    public static void simpleCheckout(String fileName) {
         Commit pre = preCommit();
-        if (!pre.getTracked().containsKey(fileName)) {
+        getFile(pre, fileName);
+    }
+    
+    public static void specIdCheckout(String commitId, String fileName) {
+        Commit specId = specificCommit(commitId);
+        getFile(specId, fileName);
+    }
+
+    // 得到commit中名为fileName的文件，并且把它恢复到WD（工作区）
+    private static void getFile(Commit commit, String fileName) {
+        if (!commit.getTracked().containsKey(fileName)) {
             exit("File does not exist in that commit.");
         }
-        Blob needFile = pre.getTracked().get(fileName);
+        Blob needFile = commit.getTracked().get(fileName);
         File temp = new File(needFile.getSourceFilePath());
         if (!temp.exists()) {
             mkFile(temp);
         }
-        writeContents(new File(needFile.getSourceFilePath()), (Object) needFile.getContents());
+        writeContents(temp, (Object) needFile.getContents());
     }
 
     // Todo:先不处理merge的情况，显示该分支所有的commit记录
@@ -123,5 +133,29 @@ public class Repository {
             System.out.println(form);
             logHelper(commit.getParentCommit());
         }
+    }
+
+    /**
+     * Todo: 创建一个新分支，该分支指向当前Head指向的branch的commit，但是不切换分支 ok!
+     * Todo: 解决报错问题！若该分支已经存在则不会创建
+     */
+    public static void branch(String branchName) {
+        Commit commit = preCommit();
+        File newBranch = join(LOCAL_BRANCH, "branchName");
+        if (newBranch.exists()) {
+            exit("A branch with that name already exists.");
+        }
+        mkFile(newBranch);
+        writeContents(newBranch, commit.getId());
+    }
+
+    /**
+     * Todo: 切换分支 使当前的Head指向指定的branch
+     * Todo: 解决报错问题 1:分支不存在 2:切换的分支为当前分支 3:当前的分支有未跟踪的文件或要被覆盖的文件
+     * Todo: 正确切换分支后应该清空暂存区
+     */
+    public static void checkoutBranch(String branchName) {
+
+
     }
 }

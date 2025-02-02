@@ -32,12 +32,22 @@ public class Main {
                 break;
             case "checkout":
                 if (args.length == 3 && args[1].equals("--")) {
-                    Repository.simpleCheckOut(args[2]);
+                    Repository.simpleCheckout(args[2]);
+                }
+                if (args.length == 4 && args[2].equals("--")) {
+                    Repository.specIdCheckout(args[1], args[3]);
+                }
+                if (args.length == 2) {
+                    Repository.checkoutBranch(args[1]);
                 }
                 break;
             case "log":
                 validateNumArg(args, 1);
                 Repository.log();
+                break;
+            case "branch":
+                validateNumArg(args, 2);
+                Repository.branch(args[1]);
                 break;
         }
     }
